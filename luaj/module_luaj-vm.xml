@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_luaj-vm" default="compile.module.luaj-vm">
+  <dirname property="module.luaj-vm.basedir" file="${ant.file.module_luaj-vm}"/>
+  
+  <property name="module.jdk.home.luaj-vm" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.luaj-vm" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.luaj-vm" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.luaj-vm" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="luaj-vm.output.dir" value="${module.luaj-vm.basedir}/bin"/>
+  <property name="luaj-vm.testoutput.dir" value="${module.luaj-vm.basedir}/bin"/>
+  
+  <path id="luaj-vm.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="luaj-vm.module.production.classpath">
+    <path refid="${module.jdk.classpath.luaj-vm}"/>
+    <pathelement location="${idea.home}/lib/junit.jar"/>
+    <pathelement location="${basedir}/../../../../lib/midpapi20.jar"/>
+    <pathelement location="${basedir}/../../../../lib/cldcapi11.jar"/>
+    <pathelement location="${basedir}/../../../../lib/bcel-5.2.jar"/>
+    <pathelement location="${path.variable.jre_lib}"/>
+    <path refid="library.ant:ant-apache-bcel:1.6.5.classpath"/>
+    <path refid="library.bcel:bcel:5.1.classpath"/>
+  </path>
+  
+  <path id="luaj-vm.runtime.production.module.classpath">
+    <pathelement location="${luaj-vm.output.dir}"/>
+    <pathelement location="${idea.home}/lib/junit.jar"/>
+    <pathelement location="${basedir}/../../../../lib/midpapi20.jar"/>
+    <pathelement location="${basedir}/../../../../lib/cldcapi11.jar"/>
+    <pathelement location="${basedir}/../../../../lib/bcel-5.2.jar"/>
+    <pathelement location="${path.variable.jre_lib}"/>
+    <path refid="library.ant:ant-apache-bcel:1.6.5.classpath"/>
+    <path refid="library.bcel:bcel:5.1.classpath"/>
+  </path>
+  
+  <path id="luaj-vm.module.classpath">
+    <pathelement location="${luaj-vm.output.dir}"/>
+    <path refid="${module.jdk.classpath.luaj-vm}"/>
+    <pathelement location="${idea.home}/lib/junit.jar"/>
+    <pathelement location="${basedir}/../../../../lib/midpapi20.jar"/>
+    <pathelement location="${basedir}/../../../../lib/cldcapi11.jar"/>
+    <pathelement location="${basedir}/../../../../lib/bcel-5.2.jar"/>
+    <pathelement location="${path.variable.jre_lib}"/>
+    <path refid="library.ant:ant-apache-bcel:1.6.5.classpath"/>
+    <path refid="library.bcel:bcel:5.1.classpath"/>
+  </path>
+  
+  <path id="luaj-vm.runtime.module.classpath">
+    <pathelement location="${luaj-vm.output.dir}"/>
+    <pathelement location="${idea.home}/lib/junit.jar"/>
+    <pathelement location="${basedir}/../../../../lib/midpapi20.jar"/>
+    <pathelement location="${basedir}/../../../../lib/cldcapi11.jar"/>
+    <pathelement location="${basedir}/../../../../lib/bcel-5.2.jar"/>
+    <pathelement location="${path.variable.jre_lib}"/>
+    <path refid="library.ant:ant-apache-bcel:1.6.5.classpath"/>
+    <path refid="library.bcel:bcel:5.1.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.luaj-vm">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.luaj-vm">
+    <patternset refid="excluded.from.module.luaj-vm"/>
+  </patternset>
+  
+  <path id="luaj-vm.module.sourcepath">
+    <dirset dir="${module.luaj-vm.basedir}">
+      <include name="src/core"/>
+      <include name="src/jse"/>
+      <include name="test/java"/>
+      <include name="test/junit"/>
+      <include name="test/lua"/>
+      <include name="examples/jse"/>
+      <include name="examples/lua"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.luaj-vm" depends="compile.module.luaj-vm.production,compile.module.luaj-vm.tests" description="Compile module luaj-vm"/>
+  
+  <target name="compile.module.luaj-vm.production" depends="register.custom.compilers" description="Compile module luaj-vm; production classes">
+    <mkdir dir="${luaj-vm.output.dir}"/>
+    <javac2 destdir="${luaj-vm.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.luaj-vm}/javac">
+      <compilerarg line="${compiler.args.luaj-vm}"/>
+      <bootclasspath refid="luaj-vm.module.bootclasspath"/>
+      <classpath refid="luaj-vm.module.production.classpath"/>
+      <src refid="luaj-vm.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.luaj-vm"/>
+    </javac2>
+    
+    <copy todir="${luaj-vm.output.dir}">
+      <fileset dir="${module.luaj-vm.basedir}/src/core">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.luaj-vm.basedir}/src/jse">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.luaj-vm.basedir}/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.luaj-vm.basedir}/test/junit">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.luaj-vm.basedir}/test/lua">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.luaj-vm.basedir}/examples/jse">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.luaj-vm.basedir}/examples/lua">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.luaj-vm.tests" depends="register.custom.compilers,compile.module.luaj-vm.production" description="compile module luaj-vm; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.luaj-vm" description="cleanup module">
+    <delete dir="${luaj-vm.output.dir}"/>
+    <delete dir="${luaj-vm.testoutput.dir}"/>
+  </target>
+</project>

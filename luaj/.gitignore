@@ -1,0 +1,17 @@
+bin/
+target/
+build/
+lib/
+jit/
+.idea/
+*.ser
+*.gz
+*.jar
+*.out
+*.tar
+*.txt
+*.zip
+docs
+*.0
+*.bin
+*.lock

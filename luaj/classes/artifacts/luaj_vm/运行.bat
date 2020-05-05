@@ -1,0 +1,1 @@
+java -jar .\luaj-vm.jar
