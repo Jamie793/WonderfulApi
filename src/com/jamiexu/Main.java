@@ -1,7 +1,5 @@
 package com.jamiexu;
 
-import com.jamiexu.KGMusic;
-
 /**
  * @author Jamiexu
  * time:2020-5-5 19:14
@@ -23,7 +21,20 @@ public class Main {
 //        QQMusic qqMusic = new QQMusic();
 //        qqMusic.loadSong("123");
 
-        CloudMusic cloudMusic = new CloudMusic();
-        cloudMusic.loadSong("123");
+//        CloudMusic cloudMusic = new CloudMusic();
+//        cloudMusic.loadSong("123");
+
+        XiMaLaYaFm xiMaLaYaFm = new XiMaLaYaFm();
+        xiMaLaYaFm.loadAlbum("相声");
+        for (int i = 0; i < xiMaLaYaFm.size(); i++) {
+            XiMaLaYaFm.AlbumBean albumBean = xiMaLaYaFm.getAlbum(i);
+            for (int j = 0; j < albumBean.size(); j++) {
+                XiMaLaYaFm.AudioBean audioBean = albumBean.getAudio(j);
+                System.out.println(audioBean.getTitle());
+                System.out.println(audioBean.getUrl());
+            }
+        }
+//        System.out.println(xiMaLaYaFm.getAlbum(0).getAudio(0).getTitle());
+//        System.out.println(xiMaLaYaFm.getAlbum(0).getAudio(0).getUrl());
     }
 }
