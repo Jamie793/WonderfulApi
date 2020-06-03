@@ -26,6 +26,7 @@ import java.util.ArrayList;
  */
 
 public class CloudMusic {
+    //last test time:2020-6-3 13:46
     private final int nums = 30;
     private int currentPos = 0;
     private static ScriptEngineManager manager = new ScriptEngineManager();
@@ -101,7 +102,7 @@ public class CloudMusic {
         }
     }
 
-    public String getPlayUrl(String id) {
+    private String getPlayUrl(String id) {
         String data = URLEncoder.encode(getPlay(id), StandardCharsets.UTF_8).replace("params%3D", "params=")
                 .replace("%26encSecKey%3D", "&encSecKey=");
         String response = get("https://music.163.com/weapi/song/enhance/player/url/v1?csrf_token=", data, data.length());
@@ -117,7 +118,7 @@ public class CloudMusic {
         return null;
     }
 
-    public void execJs() {
+    private void execJs() {
         try {
             if (engine != null)
                 return;

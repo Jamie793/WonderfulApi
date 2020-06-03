@@ -26,6 +26,7 @@ import java.util.ArrayList;
  */
 
 public class QQMusic {
+    //last test time:2020-6-3 13:46
     private final ArrayList<QQMusicBean> arrayList = new ArrayList<>();
     private final int NUM = 30;
     private final String UIN = "774461324";

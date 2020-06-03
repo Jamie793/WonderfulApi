@@ -16,13 +16,15 @@ public class Main {
 //        System.out.println(kgMusic.getCurrent().getUrl());
 
 //        GoogleTranslation googleTranslation = new GoogleTranslation();
-//        System.out.println(googleTranslation.translateTo("i love you",googleTranslation.getAllLanguage().get("中文")));
+//        System.out.println(googleTranslation.translateTo("我爱你",googleTranslation.getAllLanguage().get("英文")));
 
 //        QQMusic qqMusic = new QQMusic();
 //        qqMusic.loadSong("123");
+//        System.out.println(qqMusic.getCurrent().getUrl());
 
 //        CloudMusic cloudMusic = new CloudMusic();
 //        cloudMusic.loadSong("123");
+//        System.out.println(cloudMusic.getCurrent().getUrl());
 
 //        XiMaLaYaFm xiMaLaYaFm = new XiMaLaYaFm();
 //        xiMaLaYaFm.loadAlbum("相声");
@@ -37,12 +39,12 @@ public class Main {
 //        System.out.println(xiMaLaYaFm.getAlbum(0).getAudio(0).getTitle());
 //        System.out.println(xiMaLaYaFm.getAlbum(0).getAudio(0).getUrl());
 
-
-        KWMusic kwMusic = new KWMusic();
-        kwMusic.loadSong("123");
-        System.out.println(kwMusic.getCurrent().getUrl());
-        System.out.println(kwMusic.nextSong().getUrl());
-        System.out.println(kwMusic.nextSong().getUrl());
-        System.out.println(kwMusic.nextSong().getUrl());
+//
+//        KWMusic kwMusic = new KWMusic();
+//        kwMusic.loadSong("123");
+//        System.out.println(kwMusic.getCurrent().getUrl());
+//        System.out.println(kwMusic.nextSong().getUrl());
+//        System.out.println(kwMusic.nextSong().getUrl());
+//        System.out.println(kwMusic.nextSong().getUrl());
     }
 }

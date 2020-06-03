@@ -25,6 +25,7 @@ import java.util.HashMap;
  */
 
 public class GoogleTranslation {
+    //last test time:2020-6-3 13:46
     private static HashMap<String, String> hashMap_language;
 
     public GoogleTranslation() {

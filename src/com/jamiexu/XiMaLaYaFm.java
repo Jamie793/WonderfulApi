@@ -24,6 +24,7 @@ import java.util.ArrayList;
  */
 
 public class XiMaLaYaFm {
+    //last test time:2020-6-3 13:46
     private final int nums = 20;
     private final ArrayList<AlbumBean> album_arrayList = new ArrayList<>();
     private final String SEARCH_URL = "https://www.ximalaya.com/revision/search/main?core=album&kw=%s&page=1&spellchecker=true&rows=20&condition=relation&device=iPhone&fq=&paidFilter=false";
