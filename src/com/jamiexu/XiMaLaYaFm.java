@@ -144,6 +144,9 @@ public class XiMaLaYaFm {
             return this.audioBean.size();
         }
 
+        public String getTitle() {
+            return title;
+        }
     }
 
     class AudioBean {

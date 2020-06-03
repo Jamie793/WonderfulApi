@@ -12,7 +12,7 @@ package com.jamiexu;
 public class Main {
     public static void main(String[] args) {
 //        KGMusic kgMusic = new KGMusic();
-//        kgMusic.loadSong("123");
+//        kgMusic.loadSong("4");
 //        System.out.println(kgMusic.getCurrent().getUrl());
 
 //        GoogleTranslation googleTranslation = new GoogleTranslation();
@@ -24,17 +24,21 @@ public class Main {
 //        CloudMusic cloudMusic = new CloudMusic();
 //        cloudMusic.loadSong("123");
 
-        XiMaLaYaFm xiMaLaYaFm = new XiMaLaYaFm();
-        xiMaLaYaFm.loadAlbum("相声");
-        for (int i = 0; i < xiMaLaYaFm.size(); i++) {
-            XiMaLaYaFm.AlbumBean albumBean = xiMaLaYaFm.getAlbum(i);
-            for (int j = 0; j < albumBean.size(); j++) {
-                XiMaLaYaFm.AudioBean audioBean = albumBean.getAudio(j);
-                System.out.println(audioBean.getTitle());
-                System.out.println(audioBean.getUrl());
-            }
-        }
+//        XiMaLaYaFm xiMaLaYaFm = new XiMaLaYaFm();
+//        xiMaLaYaFm.loadAlbum("相声");
+//        for (int i = 0; i < xiMaLaYaFm.size(); i++) {
+//            XiMaLaYaFm.AlbumBean albumBean = xiMaLaYaFm.getAlbum(i);
+//            for (int j = 0; j < albumBean.size(); j++) {
+//                XiMaLaYaFm.AudioBean audioBean = albumBean.getAudio(j);
+//                System.out.println(audioBean.getTitle());
+//                System.out.println(audioBean.getUrl());
+//            }
+//        }
 //        System.out.println(xiMaLaYaFm.getAlbum(0).getAudio(0).getTitle());
 //        System.out.println(xiMaLaYaFm.getAlbum(0).getAudio(0).getUrl());
+
+
+        KWMusic kwMusic = new KWMusic();
+        kwMusic.loadSong("123");
     }
 }
