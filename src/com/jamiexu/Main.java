@@ -40,5 +40,9 @@ public class Main {
 
         KWMusic kwMusic = new KWMusic();
         kwMusic.loadSong("123");
+        System.out.println(kwMusic.getCurrent().getUrl());
+        System.out.println(kwMusic.nextSong().getUrl());
+        System.out.println(kwMusic.nextSong().getUrl());
+        System.out.println(kwMusic.nextSong().getUrl());
     }
 }
