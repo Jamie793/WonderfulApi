@@ -20,6 +20,7 @@ import java.util.ArrayList;
  */
 
 public class KGMusic {
+    //last test time:2020-6-3 13:46
 
     private final int nums = 30;
     private int currentPos = 0;
