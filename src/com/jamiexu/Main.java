@@ -11,9 +11,9 @@ package com.jamiexu;
 
 public class Main {
     public static void main(String[] args) {
-        KGMusic kgMusic = new KGMusic();
-        kgMusic.loadSong("4");
-        System.out.println(kgMusic.getCurrent().getUrl());
+//        KGMusic kgMusic = new KGMusic();
+//        kgMusic.loadSong("4");
+//        System.out.println(kgMusic.getCurrent().getUrl());
 
 //        GoogleTranslation googleTranslation = new GoogleTranslation();
 //        System.out.println(googleTranslation.translateTo("我爱你",googleTranslation.getAllLanguage().get("英文")));
@@ -46,5 +46,8 @@ public class Main {
 //        System.out.println(kwMusic.nextSong().getUrl());
 //        System.out.println(kwMusic.nextSong().getUrl());
 //        System.out.println(kwMusic.nextSong().getUrl());
+
+        XmMusic xmMusic = new XmMusic();
+        xmMusic.loadSong("13");
     }
 }
