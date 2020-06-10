@@ -10,6 +10,7 @@ import javax.script.ScriptException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -27,13 +28,13 @@ import java.util.ArrayList;
 
 public class CloudMusic {
     //last test time:2020-6-3 13:46
+    //last test time:2020-6-8 12:13
     private final int nums = 30;
     private int currentPos = 0;
-    private static ScriptEngineManager manager = new ScriptEngineManager();
-    private static ScriptEngine engine;
+    private static ScriptEngine scriptEngineManager = new ScriptEngineManager().getEngineByName("JavaScript");
     private ArrayList<CloudMusicBean> arrayList = new ArrayList<>();
 
-    public CloudMusic() {
+    static {
         execJs();
     }
 
@@ -55,7 +56,7 @@ public class CloudMusic {
             httpURLConnection.connect();
             if (httpURLConnection.getResponseCode() == 200) {
                 String str = null;
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), StandardCharsets.UTF_8));
                 while ((str = bufferedReader.readLine()) != null) {
                     stringBuilder.append(str).append("\n");
                 }
@@ -83,10 +84,24 @@ public class CloudMusic {
         return this.arrayList.get(this.currentPos);
     }
 
-    public void loadSong(String keyWord) {
+    public ArrayList<CloudMusicBean> getDataLists() {
+        return this.arrayList;
+    }
+
+    public void loadSong(String keyword) {
+        loadSong(keyword, 0);
+    }
+
+    public void loadSong(String keyWord, int page) {
+        this.arrayList.clear();
         String url = "https://music.163.com/weapi/cloudsearch/get/web?csrf_token=";
-        String data = URLEncoder.encode(getSearch(keyWord), StandardCharsets.UTF_8).replace("params%3D", "params=")
-                .replace("%26encSecKey%3D", "&encSecKey=");
+        String data = null;
+        try {
+            data = URLEncoder.encode(getSearch(keyWord, page), String.valueOf(StandardCharsets.UTF_8)).replace("params%3D", "params=")
+                    .replace("%26encSecKey%3D", "&encSecKey=");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String response = get(url, data, data.length());
         try {
             JSONObject jsonObject = new JSONObject(response).getJSONObject("result");
@@ -95,7 +110,14 @@ public class CloudMusic {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String name = jsonObject1.getString("name");
                 String id = jsonObject1.getString("id");
-                this.arrayList.add(new CloudMusicBean(name, getPlayUrl(id)));
+                JSONArray ar = jsonObject1.getJSONArray("ar");
+                String singerName = "";
+                for (int j = 0; j < ar.length(); j++) {
+                    singerName += ar.getJSONObject(j).getString("name") + "/";
+                }
+                singerName = singerName.substring(0, singerName.length() - 1);
+                int size = jsonObject1.getJSONObject("l").getInt("size");
+                this.arrayList.add(new CloudMusicBean(name, getPlayUrl(id), singerName, size));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -103,8 +125,13 @@ public class CloudMusic {
     }
 
     private String getPlayUrl(String id) {
-        String data = URLEncoder.encode(getPlay(id), StandardCharsets.UTF_8).replace("params%3D", "params=")
-                .replace("%26encSecKey%3D", "&encSecKey=");
+        String data = null;
+        try {
+            data = URLEncoder.encode(getPlay(id), String.valueOf(StandardCharsets.UTF_8)).replace("params%3D", "params=")
+                    .replace("%26encSecKey%3D", "&encSecKey=");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String response = get("https://music.163.com/weapi/song/enhance/player/url/v1?csrf_token=", data, data.length());
 //        System.out.println(id);
 //        System.out.println(data);
@@ -118,12 +145,9 @@ public class CloudMusic {
         return null;
     }
 
-    private void execJs() {
+    private static void execJs() {
         try {
-            if (engine != null)
-                return;
-            engine = manager.getEngineByName("javascript");
-            engine.eval("window = this;\n" +
+            scriptEngineManager.eval("window = this;\n" +
                     "var CryptoJS = CryptoJS || function(u, p) {\n" +
                     "        var d = {}, l = d.lib = {}, s = function() {}, t = l.Base = {\n" +
                     "            extend: function(a) {\n" +
@@ -1340,13 +1364,13 @@ public class CloudMusic {
                     "    return \"params=\" + bYf8X.encText + \"&encSecKey=\" + bYf8X.encSecKey\n" +
                     "}\n" +
                     "\n" +
-                    "function getSearch(keyWord) {\n" +
+                    "function getSearch(keyWord,page) {\n" +
                     "    var data = {\n" +
                     "        hlpretag: \"<span class=\\\"s-fc7\\\">\",\n" +
                     "        hlposttag: \"</span>\",\n" +
                     "        s: keyWord,\n" +
                     "        type: \"1\",\n" +
-                    "        offset: \"0\",\n" +
+                    "        offset: page,\n" +
                     "        total: \"true\",\n" +
                     "        limit: \"30\",\n" +
                     "        csrf_token: \"\"\n" +
@@ -1370,9 +1394,9 @@ public class CloudMusic {
     }
 
 
-    public String getSearch(String keyWord) {
+    public String getSearch(String keyWord, int page) {
         try {
-            return (String) engine.eval("getSearch('" + keyWord + "')");
+            return (String) scriptEngineManager.eval("getSearch('" + keyWord + "','" + page + "')");
         } catch (ScriptException e) {
             e.printStackTrace();
         }
@@ -1381,7 +1405,7 @@ public class CloudMusic {
 
     public String getPlay(String id) {
         try {
-            return (String) engine.eval("getPlay('" + id + "')");
+            return (String) scriptEngineManager.eval("getPlay('" + id + "')");
         } catch (ScriptException e) {
             e.printStackTrace();
         }
@@ -1392,10 +1416,14 @@ public class CloudMusic {
     class CloudMusicBean {
         private String name;
         private String url;
+        private String singerName;
+        private int size;
 
-        public CloudMusicBean(String name, String url) {
+        public CloudMusicBean(String name, String url, String singerName, int size) {
             this.name = name;
             this.url = url;
+            this.singerName = singerName;
+            this.size = size;
         }
 
         public String getName() {
@@ -1412,6 +1440,22 @@ public class CloudMusic {
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+        public String getSingerName() {
+            return singerName;
+        }
+
+        public void setSingerName(String singerName) {
+            this.singerName = singerName;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
         }
     }
 }

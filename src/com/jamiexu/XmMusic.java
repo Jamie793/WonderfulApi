@@ -84,52 +84,52 @@ public class XmMusic {
         return null;
     }
 
-    public void loadSong(String keyword) {
-        this.COOKIE = getCookie();
-        String token = getToken();
-        String url = "https://www.xiami.com/api/search/searchSongs?_q=";
-        String data = "{\"key\":\"" + keyword + "\",\"pagingVO\":{\"page\":1,\"pageSize\":" + NUM + "}}";
-        String encode = getEncode(token, "/api/search/searchSongs", data);
-        url += URLEncoder.encode(data, StandardCharsets.UTF_8) + "&_s=" + encode;
-        String response = get(url);
-        System.out.println(response);
+//    public void loadSong(String keyword) {
+//        this.COOKIE = getCookie();
+//        String token = getToken();
+//        String url = "https://www.xiami.com/api/search/searchSongs?_q=";
+//        String data = "{\"key\":\"" + keyword + "\",\"pagingVO\":{\"page\":1,\"pageSize\":" + NUM + "}}";
+//        String encode = getEncode(token, "/api/search/searchSongs", data);
+//        url += URLEncoder.encode(data, StandardCharsets.UTF_8) + "&_s=" + encode;
+//        String response = get(url);
+//        System.out.println(response);
+//
+//        try {
+//            JSONArray jsonArray = new JSONObject(response).getJSONObject("result").getJSONObject("data").getJSONArray("songs");
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                String id = jsonObject.getString("songId");
+//                String name = jsonObject.getString("songName");
+//                System.out.println(getPlayUrl(id));
+//                System.out.println(name);
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-        try {
-            JSONArray jsonArray = new JSONObject(response).getJSONObject("result").getJSONObject("data").getJSONArray("songs");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String id = jsonObject.getString("songId");
-                String name = jsonObject.getString("songName");
-                System.out.println(getPlayUrl(id));
-                System.out.println(name);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getPlayUrl(String id) {
-        String token = getToken();
-        String url = "https://www.xiami.com/api/song/getPlayInfo?_q=";
-        String data = "{\"songIds\":[" + id + "]}";
-        String encode = getEncode(token, "/api/song/getPlayInfo", data);
-        url += URLEncoder.encode(data, StandardCharsets.UTF_8) + "&_s=" + encode;
-        String response = get(url);
-        System.out.println(response);
-        try {
-            JSONArray jsonArray = new JSONObject(response).getJSONObject("result").getJSONObject("data")
-                    .getJSONArray("songPlayInfos").getJSONObject(0).getJSONArray("playInfos");
-            if (jsonArray.length() == 0)
-                return null;
-            String link = jsonArray.getJSONObject(0).getString("listenFile");
-            if (link == null || link.equals("") || link.length() == 0)
-                link = jsonArray.getJSONObject(1).getString("listenFile");
-            return link;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    private String getPlayUrl(String id) {
+//        String token = getToken();
+//        String url = "https://www.xiami.com/api/song/getPlayInfo?_q=";
+//        String data = "{\"songIds\":[" + id + "]}";
+//        String encode = getEncode(token, "/api/song/getPlayInfo", data);
+//        url += URLEncoder.encode(data, StandardCharsets.UTF_8) + "&_s=" + encode;
+//        String response = get(url);
+//        System.out.println(response);
+//        try {
+//            JSONArray jsonArray = new JSONObject(response).getJSONObject("result").getJSONObject("data")
+//                    .getJSONArray("songPlayInfos").getJSONObject(0).getJSONArray("playInfos");
+//            if (jsonArray.length() == 0)
+//                return null;
+//            String link = jsonArray.getJSONObject(0).getString("listenFile");
+//            if (link == null || link.equals("") || link.length() == 0)
+//                link = jsonArray.getJSONObject(1).getString("listenFile");
+//            return link;
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
 
     public String getEncode(String token, String url, String data) {

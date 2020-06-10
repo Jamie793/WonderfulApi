@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 
 public class XiMaLaYaFm {
     //last test time:2020-6-3 13:46
+    //last test time:2020-6-10 12:19
     private final int nums = 20;
     private final ArrayList<AlbumBean> album_arrayList = new ArrayList<>();
     private final String SEARCH_URL = "https://www.ximalaya.com/revision/search/main?core=album&kw=%s&page=1&spellchecker=true&rows=20&condition=relation&device=iPhone&fq=&paidFilter=false";
@@ -41,7 +43,7 @@ public class XiMaLaYaFm {
             httpURLConnection.connect();
             if (httpURLConnection.getResponseCode() == 200) {
                 String str = null;
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), StandardCharsets.UTF_8));
                 while ((str = bufferedReader.readLine()) != null) {
                     stringBuilder.append(str).append("\n");
                 }
@@ -54,7 +56,11 @@ public class XiMaLaYaFm {
     }
 
     public void loadAlbum(String keyWord) {
-        keyWord = URLEncoder.encode(keyWord, StandardCharsets.UTF_8);
+        try {
+            keyWord = URLEncoder.encode(keyWord, String.valueOf(StandardCharsets.UTF_8));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String response = get(String.format(SEARCH_URL, keyWord));
         try {
             JSONArray jsonArray = new JSONObject(response).getJSONObject("data").getJSONObject("album").getJSONArray("docs");

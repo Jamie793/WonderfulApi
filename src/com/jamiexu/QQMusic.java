@@ -9,6 +9,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -27,10 +28,16 @@ import java.util.ArrayList;
 
 public class QQMusic {
     //last test time:2020-6-3 13:46
+    //last test time:2020-6-8 18:56
     private final ArrayList<QQMusicBean> arrayList = new ArrayList<>();
+    private final static ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
     private final int NUM = 30;
     private final String UIN = "774461324";
     private int currentPos = 0;
+
+    static {
+        initJs();
+    }
 
     public QQMusicBean preSong() {
         if (this.currentPos != 0)
@@ -48,6 +55,10 @@ public class QQMusic {
         return this.arrayList.get(this.currentPos);
     }
 
+    public ArrayList<QQMusicBean> getDataLists() {
+        return this.arrayList;
+    }
+
 
     private String get(String url) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -58,7 +69,7 @@ public class QQMusic {
             httpURLConnection.connect();
             if (httpURLConnection.getResponseCode() == 200) {
                 String str = null;
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream(), StandardCharsets.UTF_8));
                 while ((str = bufferedReader.readLine()) != null) {
                     stringBuilder.append(str).append("\n");
                 }
@@ -72,7 +83,14 @@ public class QQMusic {
 
 
     public void loadSong(String keyWord) {
-        String url = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&searchid=42217694605196790&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=1&n="
+        loadSong(keyWord, 1);
+    }
+
+
+    public void loadSong(String keyWord, int page) {
+        this.arrayList.clear();
+        String url = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp?ct=24&qqmusic_ver=1298&new_json=1&remoteplace=txt.yqq.center&searchid=42217694605196790&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p="
+                + page + "&n="
                 + this.NUM + "&w="
                 + keyWord + "&g_tk_new_20200303=5381&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0";
 
@@ -82,10 +100,17 @@ public class QQMusic {
             JSONArray jsonArray = jsonObject.getJSONArray("list");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String title = jsonObject1.getJSONObject("album").getString("title");
+                String title = jsonObject1.getJSONObject("album").getString("name");
+                JSONArray singer = jsonObject1.getJSONArray("singer");
+                String singerName = "";
+                for (int j = 0; j < singer.length(); j++) {
+                    singerName += singer.getJSONObject(j).getString("title") + "/";
+                }
+                singerName = singerName.substring(0, singerName.length() - 1);
+                int size = jsonObject1.getJSONObject("file").getInt("size_128mp3");
                 String mid = jsonObject1.getString("mid");
-                String purl = "https://isure.stream.qqmusic.qq.com/"+getVkey(mid);
-                this.arrayList.add(new QQMusicBean(title,purl));
+                String purl = "https://isure.stream.qqmusic.qq.com/" + getVkey(mid);
+                this.arrayList.add(new QQMusicBean(title, purl, singerName, size));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -101,7 +126,12 @@ public class QQMusic {
     public String getVkey(String songmid) {
         String data = getData(songmid);
         String sign = getSign(data);
-        String url = "https://u.y.qq.com/cgi-bin/musics.fcg?-=getplaysongvkey946142466285981&g_tk=480671689&sign=" + sign + "&loginUin=" + this.UIN + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=" + URLEncoder.encode(data, StandardCharsets.UTF_8);
+        String url = null;
+        try {
+            url = "https://u.y.qq.com/cgi-bin/musics.fcg?-=getplaysongvkey946142466285981&g_tk=480671689&sign=" + sign + "&loginUin=" + this.UIN + "&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data=" + URLEncoder.encode(data, String.valueOf(StandardCharsets.UTF_8));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 //        System.out.println(get(url));
         try {
             JSONArray jsonArray = new JSONObject(get(url)).getJSONObject("req_0").getJSONObject("data").getJSONArray("midurlinfo");
@@ -112,12 +142,9 @@ public class QQMusic {
         return null;
     }
 
-
-    public String getSign(String data) {
+    public static void initJs() {
         try {
-            ScriptEngineManager manager = new ScriptEngineManager();
-            ScriptEngine engine = manager.getEngineByName("javascript");
-            engine.eval("window=this;var n = window;\n" +
+            scriptEngine.eval("window=this;var n = window;\n" +
                     "var getSecurity = function() {\n" +
                     "\n" +
                     "    n.__sign_hash_20200305 = function(n, t) {\n" +
@@ -540,19 +567,33 @@ public class QQMusic {
                     "function getSign(id){\n" +
                     "    return getSecurity()(id)\n" +
                     "}\n");
-            return (String) engine.eval("getSign('" + data + "')");
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public String getSign(String data) {
+        try {
+
+            return (String) scriptEngine.eval("getSign('" + data + "')");
         } catch (ScriptException e) {
             e.printStackTrace();
         }
         return null;
     }
+
     class QQMusicBean {
         private String name;
         private String url;
+        private String singerName;
+        private int size;
 
-        public QQMusicBean(String name, String url) {
+        public QQMusicBean(String name, String url, String singerNamem, int size) {
             this.name = name;
             this.url = url;
+            this.singerName = singerNamem;
+            this.size = size;
         }
 
         public String getName() {
@@ -569,6 +610,22 @@ public class QQMusic {
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+        public String getSingerName() {
+            return singerName;
+        }
+
+        public void setSingerName(String singerName) {
+            this.singerName = singerName;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
         }
     }
 }
