@@ -5,7 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -91,17 +90,17 @@ public class KGMusic {
         this.arrayList.clear();
         try {
 
+            String timeStemp = System.currentTimeMillis() + "";
             ArrayList<String> strings = new ArrayList<>();
             strings.add("bitrate=0");
-//            strings.add("callback=callback345");
-            strings.add("clienttime=1606477446577");
+            strings.add("clienttime=" + timeStemp);
             strings.add("clientver=2000");
             strings.add("dfid=-");
             strings.add("inputtype=0");
             strings.add("iscorrection=1");
             strings.add("isfuzzy=0");
             strings.add("keyword=559");
-            strings.add("mid=1606477446577");
+            strings.add("mid=" + timeStemp);
             strings.add("page=" + page);
             strings.add("pagesize=" + pageSize);
             strings.add("platform=WebFilter");
@@ -109,7 +108,7 @@ public class KGMusic {
             strings.add("srcappid=2919");
             strings.add("tag=em");
             strings.add("userid=-1");
-            strings.add("uuid=1606477446577");
+            strings.add("uuid=" + timeStemp);
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : strings) {
                 stringBuilder.append(s).append("&");
@@ -124,7 +123,6 @@ public class KGMusic {
             JSONArray jsonArray = jsonObject.getJSONArray("lists");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = (JSONObject) jsonArray.get(i);
-//                System.out.println(jsonObject1);
                 String name = jsonObject1.getString("SongName").replace("</em>", "")
                         .replace("<em>", "");
 

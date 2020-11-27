@@ -1,9 +1,6 @@
 package com.jamiexu;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author Jamiexu
@@ -17,9 +14,9 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         KGMusic kgMusic = new KGMusic();
-        kgMusic.loadSong("559",1);
+        kgMusic.loadSong("559", 1);
         ArrayList<KGMusic.KGBean> kgBeans = kgMusic.getDataLists();
-        for (KGMusic.KGBean kgBean : kgBeans){
+        for (KGMusic.KGBean kgBean : kgBeans) {
             System.out.println(kgBean.getName());
             System.out.println(kgBean.getSingerName());
             System.out.println(kgBean.getUrl());
