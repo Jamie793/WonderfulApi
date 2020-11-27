@@ -99,7 +99,7 @@ public class KGMusic {
             strings.add("inputtype=0");
             strings.add("iscorrection=1");
             strings.add("isfuzzy=0");
-            strings.add("keyword=559");
+            strings.add("keyword=" + keyword);
             strings.add("mid=" + timeStemp);
             strings.add("page=" + page);
             strings.add("pagesize=" + pageSize);
@@ -162,11 +162,13 @@ public class KGMusic {
     private String getPlayUrl(String filehash, String albumID) {
         try {
             String responese = get("https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=" + filehash +
-                    "&album_id=" + albumID + "&mid=fd25635b451cd15bdc5562f9c4cf0e67&_=1606480130947", "");
+                    "&album_id=" + albumID + "&mid=fd25635b451cd15bdc5562f9c4cf0e67&_=" + System.currentTimeMillis()
+                    , "");
             JSONObject jsonObject = new JSONObject(responese).getJSONObject("data");
             return jsonObject.getString("play_url");
         } catch (JSONException e) {
             e.printStackTrace();
+//            如果报错则需要验证码
         }
         return null;
     }
