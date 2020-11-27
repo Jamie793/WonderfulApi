@@ -1,6 +1,9 @@
 package com.jamiexu;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Jamiexu
@@ -13,20 +16,20 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-//        KGMusic kgMusic = new KGMusic();
-//        kgMusic.loadSong("4",1);
-//        ArrayList<KGMusic.KGBean> kgBeans = kgMusic.getDataLists();
-//        for (KGMusic.KGBean kgBean : kgBeans){
-//            System.out.println(kgBean.getName());
-//            System.out.println(kgBean.getSingerName());
-//            System.out.println(kgBean.getUrl());
-//            System.out.println(kgBean.getSize());
-//            System.out.println();
-//        }
+        KGMusic kgMusic = new KGMusic();
+        kgMusic.loadSong("559",1);
+        ArrayList<KGMusic.KGBean> kgBeans = kgMusic.getDataLists();
+        for (KGMusic.KGBean kgBean : kgBeans){
+            System.out.println(kgBean.getName());
+            System.out.println(kgBean.getSingerName());
+            System.out.println(kgBean.getUrl());
+            System.out.println(kgBean.getSize());
+            System.out.println();
+        }
 
 
-//        GoogleTranslation googleTranslation = new GoogleTranslation();
-//        System.out.println(googleTranslation.translateTo("我爱你",googleTranslation.getAllLanguage().get("英文")));
+        GoogleTranslation googleTranslation = new GoogleTranslation();
+        System.out.println(googleTranslation.translateTo("我爱你", googleTranslation.getAllLanguage().get("英文")));
 
 //        QQMusic qqMusic = new QQMusic();
 //        qqMusic.loadSong("我爱你",1);
@@ -64,18 +67,19 @@ public class Main {
 //        System.out.println(xiMaLaYaFm.getAlbum(0).getAudio(0).getUrl());
 
 //
-        KWMusic kwMusic = new KWMusic();
-        kwMusic.loadSong("123");
-        ArrayList<KWMusic.KWBean> kgBeans = kwMusic.getDataLists();
-        for (KWMusic.KWBean kwBean : kgBeans) {
-            System.out.println(kwBean.getName());
-            System.out.println(kwBean.getSingerName());
-            System.out.println(kwBean.getUrl());
-            System.out.println(kwBean.getSize());
-            System.out.println();
-        }
+//        KWMusic kwMusic = new KWMusic();
+//        kwMusic.loadSong("123");
+//        ArrayList<KWMusic.KWBean> kgBeans = kwMusic.getDataLists();
+//        for (KWMusic.KWBean kwBean : kgBeans) {
+//            System.out.println(kwBean.getName());
+//            System.out.println(kwBean.getSingerName());
+//            System.out.println(kwBean.getUrl());
+//            System.out.println(kwBean.getSize());
+//            System.out.println();
+//        }
 
 //        XmMusic xmMusic = new XmMusic();
 //        xmMusic.loadSong("13");
+
     }
 }
